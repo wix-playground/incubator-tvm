@@ -56,7 +56,7 @@ Expr TransformLayout(Expr raw, Layout src_layout, Layout dst_layout) {
   }
 
   // for input that supposed to be broadcasted we keep it untouched
-  if (raw.as<ConstantNode>()) {
+  if (src_layout.name() == "C" && raw.as<ConstantNode>()) {
     int size = 1;
     for (auto dim: raw.as<ConstantNode>()->data.Shape()) {
       size *= dim;
